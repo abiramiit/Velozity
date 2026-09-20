@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.notificationRouter = void 0;
+const express_1 = require("express");
+const notification_controller_1 = require("../controllers/notification.controller");
+const auth_middleware_1 = require("../middleware/auth.middleware");
+const client_1 = require("@prisma/client");
+exports.notificationRouter = (0, express_1.Router)();
+exports.notificationRouter.use(auth_middleware_1.requireAuth);
+exports.notificationRouter.get('/', notification_controller_1.getNotifications);
+exports.notificationRouter.post('/', (0, auth_middleware_1.requireRole)([client_1.Role.ADMIN, client_1.Role.PROJECT_MANAGER]), notification_controller_1.createNotification);
+exports.notificationRouter.patch('/read-all', notification_controller_1.markAllAsRead);
+exports.notificationRouter.patch('/:id/read', notification_controller_1.markAsRead);
